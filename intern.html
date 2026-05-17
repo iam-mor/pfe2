@@ -391,30 +391,39 @@
                     const evaluation = intern.evaluation;
                     const isComplete = progress >= 100;
                     
-                    let evaluationHtml = '';
-                    if (isComplete && evaluation) {
-                        evaluationHtml = `
-                        <div class="evaluation-results">
-                            <h4 style="color:#0F172A; margin-bottom:16px;"><i class="fas fa-star mr-2" style="color:#fbbf24;"></i>Evaluation Results</h4>
-                            <div class="eval-score"><span>Punctuality</span><span>${evaluation.punctuality}/5</span></div>
-                            <div class="eval-score"><span>Quality of Work</span><span>${evaluation.quality}/5</span></div>
-                            <div class="eval-score"><span>Teamwork</span><span>${evaluation.teamwork}/5</span></div>
-                            ${evaluation.initiative ? `<div class="eval-score"><span>Initiative</span><span>${evaluation.initiative}/5</span></div>` : ''}
-                            ${evaluation.comments ? `<div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(56,163,253,0.15);"><span style="color:#4B5563; font-size:13px;">Comments:</span><p style="color:#0F172A; font-size:14px; margin-top:6px;">${evaluation.comments}</p></div>` : ''}
-                        </div>`;
-                    } else {
-                        evaluationHtml = `
-                        <div class="eval-notice">
-                            <div>
-                                <i class="fas fa-hourglass-half" style="font-size:32px; color:#94a3b8; margin-bottom:12px;"></i>
-                                <h4 style="color:#0F172A; margin-bottom:8px;">No Evaluation Results Yet</h4>
-                                <p style="color:#64748b; font-size:14px;">Evaluation results will appear here once your progress reaches 100%.</p>
-                                <div style="margin-top:12px;">
-                                    <span style="color:#4B5563; font-size:13px;">Current Progress: ${progress}%</span>
-                                </div>
-                            </div>
-                        </div>`;
-                    }
+             let evaluationHtml = '';
+             if (isComplete && evaluation) {
+               evaluationHtml = `
+             <div class="evaluation-results">
+             <h4 style="color:#0F172A; margin-bottom:16px;"><i class="fas fa-star mr-2" style="color:#fbbf24;"></i>Evaluation Results</h4>
+              <div class="eval-score"><span>Punctuality</span><span>${evaluation.punctuality}/5</span></div>
+             <div class="eval-score"><span>Quality of Work</span><span>${evaluation.quality}/5</span></div>
+             <div class="eval-score"><span>Teamwork</span><span>${evaluation.teamwork}/5</span></div>
+              ${evaluation.initiative ? `<div class="eval-score"><span>Initiative</span><span>${evaluation.initiative}/5</span></div>` : ''}
+             <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(56,163,253,0.15);">
+            <span style="color:#4B5563; font-size:13px;">Total Score: </span>
+            <span style="font-weight:700; color:#1F7AD1; font-size:16px;">${(evaluation.punctuality||0)+(evaluation.quality||0)+(evaluation.teamwork||0)+(evaluation.initiative||0)}/20</span>
+             </div>
+          ${evaluation.comments ? `<div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(56,163,253,0.15);"><span style="color:#4B5563; font-size:13px;">Comments:</span><p style="color:#0F172A; font-size:14px; margin-top:6px;">${evaluation.comments}</p></div>` : ''}
+            </div>`;
+            } else {
+          evaluationHtml = `
+         <div class="evaluation-results">
+         <h4 style="color:#94a3b8; margin-bottom:16px;"><i class="fas fa-hourglass-half mr-2"></i>No Evaluation Results Yet</h4>
+         <div class="eval-score"><span>Punctuality</span><span>-/5</span></div>
+         <div class="eval-score"><span>Quality of Work</span><span>-/5</span></div>
+         <div class="eval-score"><span>Teamwork</span><span>-/5</span></div>
+         <div class="eval-score"><span>Initiative</span><span>-/5</span></div>
+         <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(56,163,253,0.15);">
+            <span style="color:#4B5563; font-size:13px;">Total Score: </span>
+            <span style="font-weight:700; color:#94a3b8; font-size:16px;">-/20</span>
+          </div>
+          <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(56,163,253,0.15);">
+            <span style="color:#4B5563; font-size:13px;">Comments:</span>
+            <p style="color:#94a3b8; font-size:14px; margin-top:6px;">No comments yet</p>
+        </div>
+    </div>`;
+              }
                     
                     return `
                     <div class="internship-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
