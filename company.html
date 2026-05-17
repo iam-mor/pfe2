@@ -386,8 +386,24 @@
     }
 
     function renderEvaluationsView(container) {
-        container.innerHTML = `<div class="view-container"><div class="section-header"><h2 class="section-title">Pending Evaluations</h2></div><div class="evaluation-list">${pendingEvaluations.map(e => renderEvalItem(e)).join('')}${pendingEvaluations.length===0?'<div class="empty-state"><i class="fas fa-check-circle"></i><p>No pending evaluations</p></div>':''}</div>${completedEvaluations.length>0?`<div class="section-header" style="margin-top:30px;"><h2 class="section-title">Completed Evaluations</h2></div><div class="evaluation-list">${completedEvaluations.map(e => `<div class="eval-item"><div class="eval-info"><h4>${e.internName} <span class="status-badge status-evaluated">Evaluated</span></h4><p>${e.internship} · Score: ${e.avgScore}/5</p></div></div>`).join('')}</div>`:''}</div>`;
-    }
+    container.innerHTML = `<div class="view-container">
+        <div class="section-header"><h2 class="section-title">⭐ Evaluations</h2></div>
+        <div class="tabs">
+            <button class="tab active" onclick="switchEvalTab('pendingEval',this)">Pending (${pendingEvaluations.length})</button>
+            <button class="tab" onclick="switchEvalTab('completedEval',this)">Completed (${completedEvaluations.length})</button>
+        </div>
+        <div id="pendingEvalTab" class="inner-tab-content active">
+            <div class="evaluation-list">
+                ${pendingEvaluations.length>0?pendingEvaluations.map(e => renderEvalItem(e)).join(''):'<div class="empty-state"><i class="fas fa-check-circle"></i><p>No pending evaluations</p></div>'}
+            </div>
+        </div>
+        <div id="completedEvalTab" class="inner-tab-content">
+            <div class="evaluation-list">
+                ${completedEvaluations.length>0?completedEvaluations.map(e => `<div class="eval-item"><div class="eval-info"><h4>${e.internName} <span class="status-badge status-evaluated">Evaluated</span></h4><p>${e.internship} · Score: ${e.avgScore}/5</p></div></div>`).join(''):'<div class="empty-state"><i class="fas fa-star-half-alt"></i><p>No completed evaluations yet</p></div>'}
+            </div>
+        </div>
+    </div>`;
+}
 
     function renderSignatureView(container) {
         const evaluatedNotSigned = completedEvaluations.filter(e => !signedAgreements.some(s => s.email === e.email));
@@ -542,6 +558,14 @@
         if (target) target.classList.add('active');
     }
 
+    function switchEvalTab(tabName, btn) {
+    document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.inner-tab-content').forEach(c => c.classList.remove('active'));
+    const target = document.getElementById(`${tabName}Tab`);
+    if (target) target.classList.add('active');
+}
+
     function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
     function logout() { if (confirm('Are you sure you want to logout?')) { localStorage.removeItem('currentUser'); window.location.href = 'login.html'; } }
 
@@ -565,6 +589,7 @@
     window.logout = logout;
     window.markAsRead = markAsRead;
     window.toggleNotifications = toggleNotifications;
+    window.switchEvalTab = switchEvalTab;
 
     document.addEventListener('click', (e) => {
         const nc = document.querySelector('.notification-container');
