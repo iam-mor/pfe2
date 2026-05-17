@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background: linear-gradient(135deg, #EEF2F6 0%, #E6ECF3 40%, #F4F7FB 100%);
@@ -20,19 +19,16 @@
             overflow-x: hidden;
             color: #0F172A;
         }
-
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         @keyframes floatBlob {
             0%, 100% { transform: translate(0, 0) scale(1); }
             33% { transform: translate(40px, -30px) scale(1.05); }
             66% { transform: translate(-20px, 35px) scale(0.95); }
         }
-
         .blob { position: fixed; width: 600px; height: 600px; border-radius: 50%; filter: blur(70px); opacity: 0.15; pointer-events: none; animation: floatBlob 18s infinite ease-in-out; z-index: 0; }
         .blob-1 { background: radial-gradient(circle, rgba(239,68,68,0.5) 0%, rgba(239,68,68,0) 70%); top: -200px; right: -150px; }
         .blob-2 { background: radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(139,92,246,0) 70%); bottom: -200px; left: -150px; animation-delay: -9s; }
@@ -45,7 +41,6 @@
             z-index: 100; border: 1px solid rgba(239,68,68,0.25);
             box-shadow: 0 4px 15px rgba(0,0,0,0.03); animation: pulseGlow 4s infinite ease-in-out;
         }
-
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-color: rgba(239,68,68,0.25); }
             50% { box-shadow: 0 8px 30px rgba(239,68,68,0.35); border-color: rgba(239,68,68,0.5); }
@@ -167,7 +162,7 @@
 
 <main class="main-content" id="mainContent"></main>
 
-<!-- Modals -->
+<!-- Company Details Modal -->
 <div id="companyModal" class="modal">
     <div class="modal-content">
         <h3><i class="fas fa-building mr-2" style="color:#ef4444;"></i>Company Details</h3>
@@ -180,6 +175,7 @@
     </div>
 </div>
 
+<!-- Agreement Modal -->
 <div id="contractModal" class="modal">
     <div class="modal-content">
         <h3><i class="fas fa-file-contract mr-2" style="color:#ef4444;"></i>Internship Agreement</h3>
@@ -191,17 +187,7 @@
     </div>
 </div>
 
-<div id="reviewEvalModal" class="modal">
-    <div class="modal-content">
-        <h3><i class="fas fa-search mr-2" style="color:#ef4444;"></i>Review Company Signature</h3>
-        <div id="reviewEvalDetails" class="evaluation-preview"></div>
-        <div style="display:flex;gap:12px;margin-top:20px;">
-            <button class="btn-approve" onclick="signFromReview()" style="flex:1"><i class="fas fa-check-double mr-1"></i> Sign & Complete</button>
-            <button onclick="closeModal('reviewEvalModal')" class="btn-outline">Close</button>
-        </div>
-    </div>
-</div>
-
+<!-- Sign & Complete Modal -->
 <div id="finalizeModal" class="modal">
     <div class="modal-content">
         <h3><i class="fas fa-clipboard-check mr-2" style="color:#ef4444;"></i>Sign & Complete Internship</h3>
@@ -221,9 +207,9 @@
     let currentView = 'dashboard';
 
     const defaultCompanies = [
-        { id: 'c1', companyName: 'Tech Solutions DZ', email: 'tech@techsolutions.dz', registrationNumber: 'RC-12345', phone: '+213 555 111 222', sector: 'Software & AI', employeeCount: '50-100', address: 'Algiers, Algeria', website: 'www.techsolutions.dz', description: 'Leading software development company.', registeredDate: '2026-04-01', status: 'pending_verification' },
-        { id: 'c2', companyName: 'Digital Innovators', email: 'info@digitalinnovators.dz', registrationNumber: 'RC-67890', phone: '+213 555 333 444', sector: 'Digital Marketing', employeeCount: '10-50', address: 'Oran, Algeria', website: 'www.digitalinnovators.dz', description: 'Digital marketing agency.', registeredDate: '2026-04-05', status: 'verified', verifiedDate: '2026-04-10' },
-        { id: 'c3', companyName: 'Cloud Systems DZ', email: 'cloud@cloudsystems.dz', registrationNumber: 'RC-11223', phone: '+213 555 555 666', sector: 'Cloud Computing', employeeCount: '100+', address: 'Constantine, Algeria', website: 'www.cloudsystems.dz', description: 'Cloud infrastructure provider.', registeredDate: '2026-04-08', status: 'pending_verification' }
+        { id: 'c1', companyName: 'Tech Solutions DZ', email: 'tech@techsolutions.dz', registrationNumber: 'RC-12345', phone: '+213 555 111 222', sector: 'Software & AI', address: 'Algiers, Algeria', website: 'www.techsolutions.dz', description: 'Leading software development company.', registeredDate: '2026-04-01', status: 'pending_verification' },
+        { id: 'c2', companyName: 'Digital Innovators', email: 'info@digitalinnovators.dz', registrationNumber: 'RC-67890', phone: '+213 555 333 444', sector: 'Digital Marketing', address: 'Oran, Algeria', website: 'www.digitalinnovators.dz', description: 'Digital marketing agency.', registeredDate: '2026-04-05', status: 'verified', verifiedDate: '2026-04-10' },
+        { id: 'c3', companyName: 'Cloud Systems DZ', email: 'cloud@cloudsystems.dz', registrationNumber: 'RC-11223', phone: '+213 555 555 666', sector: 'Cloud Computing', address: 'Constantine, Algeria', website: 'www.cloudsystems.dz', description: 'Cloud infrastructure provider.', registeredDate: '2026-04-08', status: 'pending_verification' }
     ];
 
     const defaultApplications = [
@@ -240,30 +226,36 @@
     ];
 
     function loadCompanies() { return JSON.parse(localStorage.getItem('registeredCompanies')) || defaultCompanies; }
-    function saveCompanies(companies) { localStorage.setItem('registeredCompanies', JSON.stringify(companies)); }
+    function saveCompanies(c) { localStorage.setItem('registeredCompanies', JSON.stringify(c)); }
     function loadApplications() { return JSON.parse(localStorage.getItem('applications')) || defaultApplications; }
-    function saveApplications(apps) { localStorage.setItem('applications', JSON.stringify(apps)); }
+    function saveApplications(a) { localStorage.setItem('applications', JSON.stringify(a)); }
     function loadStudents() { return JSON.parse(localStorage.getItem('registeredStudents')) || defaultStudents; }
 
     // ==================== RENDERING ====================
     function renderView(view) {
         currentView = view;
-        document.querySelectorAll('.menu-item').forEach(item => item.classList.toggle('active', item.dataset.view === view));
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.toggle('active', i.dataset.view === view));
         const container = document.getElementById('mainContent');
+
         switch(view) {
             case 'dashboard': renderDashboard(container); break;
             case 'companies': renderCompaniesView(container); break;
             case 'validations': renderValidationsView(container); break;
             case 'students': renderStudentsView(container); break;
+            default: renderDashboard(container);
         }
+
         if (view !== 'dashboard') {
             const vc = container.querySelector('.view-container');
             if (vc && !vc.querySelector('.back-btn')) {
-                vc.insertAdjacentHTML('afterbegin', '<button class="back-btn" onclick="renderView(\'dashboard\')"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>');
+                vc.insertAdjacentHTML('afterbegin',
+                    '<button class="back-btn" onclick="renderView(\'dashboard\')"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>'
+                );
             }
         }
     }
 
+    // ==================== DASHBOARD ====================
     function renderDashboard(container) {
         const companies = loadCompanies();
         const pendingCompanies = companies.filter(c => c.status === 'pending_verification');
@@ -326,22 +318,43 @@
         const companies = loadCompanies();
         const apps = loadApplications();
         const activities = [];
+
         companies.forEach(c => {
-            activities.push({ type: 'company', name: c.companyName, action: c.status === 'verified' ? 'verified' : c.status === 'rejected' ? 'rejected' : 'pending verification', date: c.registeredDate, status: c.status });
+            activities.push({
+                type: 'company',
+                name: c.companyName,
+                action: c.status === 'verified' ? 'verified' : c.status === 'rejected' ? 'rejected' : 'pending verification',
+                date: c.registeredDate,
+                status: c.status
+            });
         });
+
         apps.forEach(a => {
-            activities.push({ type: 'application', name: a.studentName, action: `${a.internshipTitle} (${a.status.replace(/_/g, ' ')})`, date: a.date, status: a.status });
+            activities.push({
+                type: 'application',
+                name: a.studentName,
+                action: `${a.internshipTitle} (${a.status.replace(/_/g, ' ')})`,
+                date: a.date,
+                status: a.status
+            });
         });
+
         activities.sort((a, b) => new Date(b.date) - new Date(a.date));
         const recent = activities.slice(0, 10);
 
         if (!recent.length) return '<div class="empty-state"><i class="fas fa-inbox"></i><p>No recent activity</p></div>';
+
         let html = '<table><thead><tr><th>Date</th><th>Activity</th><th>Status</th></tr></thead><tbody>';
         const statusMap = {
-            'pending_verification': 'status-pending', 'verified': 'status-verified', 'rejected': 'status-rejected',
-            'accepted': 'status-accepted', 'approved': 'status-approved',
-            'evaluation_submitted': 'status-evaluation_submitted', 'completed': 'status-completed'
+            'pending_verification': 'status-pending',
+            'verified': 'status-verified',
+            'rejected': 'status-rejected',
+            'accepted': 'status-accepted',
+            'approved': 'status-approved',
+            'evaluation_submitted': 'status-evaluation_submitted',
+            'completed': 'status-completed'
         };
+
         recent.forEach(act => {
             html += `<tr>
                 <td>${new Date(act.date).toLocaleDateString()}</td>
@@ -349,10 +362,12 @@
                 <td><span class="status-badge ${statusMap[act.status] || 'status-pending'}">${act.status.replace(/_/g, ' ')}</span></td>
             </tr>`;
         });
+
         html += '</tbody></table>';
         return html;
     }
 
+    // ==================== COMPANY VERIFICATIONS ====================
     function renderCompaniesView(container) {
         const companies = loadCompanies();
         const pending = companies.filter(c => c.status === 'pending_verification');
@@ -380,7 +395,7 @@
             </div>
         </div>`;
     }
-    
+
     function renderFullPendingTable(pending) {
         if (!pending.length) return '<div class="empty-state"><i class="fas fa-check-circle"></i><p>No pending verifications</p></div>';
         let html = '<table><thead><tr><th>Company</th><th>Email</th><th>Phone</th><th>Address</th><th>Sector</th><th>Registered</th><th>Action</th></tr></thead><tbody>';
@@ -429,12 +444,12 @@
         return html;
     }
 
-    // ==================== VALIDATIONS ====================
+    // ==================== INTERNSHIP VALIDATIONS ====================
     function renderValidationsView(container) {
         const apps = loadApplications();
         const agreements = apps.filter(a => a.status === 'accepted');
         const inProgress = apps.filter(a => a.status === 'approved' || a.status === 'in_progress');
-        const evalReview = apps.filter(a => a.status === 'evaluation_submitted');
+        const signature = apps.filter(a => a.status === 'evaluation_submitted');
         const completed = apps.filter(a => a.status === 'completed');
 
         container.innerHTML = `
@@ -449,7 +464,7 @@
             <div class="tabs">
                 <button class="tab active" onclick="switchValidationTab('agreements', this)">Agreements (${agreements.length})</button>
                 <button class="tab" onclick="switchValidationTab('inprogress', this)">In Progress (${inProgress.length})</button>
-                <button class="tab" onclick="switchValidationTab('evalreview', this)">Signature (${evalReview.length})</button>
+                <button class="tab" onclick="switchValidationTab('signature', this)">Signature (${signature.length})</button>
                 <button class="tab" onclick="switchValidationTab('completed', this)">Completed (${completed.length})</button>
             </div>
             <div id="agreementsValidTab" class="inner-tab-content active">
@@ -458,8 +473,8 @@
             <div id="inprogressValidTab" class="inner-tab-content">
                 <div class="table-container">${renderInProgressTable(inProgress)}</div>
             </div>
-            <div id="evalreviewValidTab" class="inner-tab-content">
-                <div class="table-container">${renderSignatureTable(evalReview)}</div>
+            <div id="signatureValidTab" class="inner-tab-content">
+                <div class="table-container">${renderSignatureTable(signature)}</div>
             </div>
             <div id="completedValidTab" class="inner-tab-content">
                 <div class="table-container">${renderCompletedTable(completed)}</div>
@@ -503,22 +518,18 @@
     }
 
     function renderSignatureTable(list) {
-        if (!list.length) return '<div class="empty-state"><i class="fas fa-star-half-alt"></i><p>No evaluations awaiting signature</p></div>';
-        let html = '<table><thead><tr><th>Student</th><th>Company</th><th>Internship</th><th>Evaluation</th><th>Company Signed</th><th>Action</th></tr></thead><tbody>';
+        if (!list.length) return '<div class="empty-state"><i class="fas fa-signature"></i><p>No evaluations awaiting signature</p></div>';
+        let html = '<table><thead><tr><th>Student</th><th>Company</th><th>Internship</th><th>Company Signed</th><th>Action</th></tr></thead><tbody>';
         list.forEach(a => {
-            const e = a.evaluation || {};
-            const evalSummary = e.punctuality ? `P:${e.punctuality} Q:${e.quality} T:${e.teamwork} I:${e.initiative}` : 'No details';
-            const companySignedBadge = a.diplomaSignedByCompany
+            const cs = a.diplomaSignedByCompany
                 ? '<span class="status-badge status-verified">✓ Signed</span>'
                 : '<span class="status-badge status-pending">Pending</span>';
             html += `<tr>
                 <td><strong>${a.studentName}</strong></td>
                 <td>${a.company}</td>
                 <td>${a.internshipTitle}</td>
-                <td>${evalSummary}</td>
-                <td>${companySignedBadge}</td>
+                <td>${cs}</td>
                 <td>
-                    <button class="btn-outline" onclick="openReviewEvalModal('${a.id}')"><i class="fas fa-search mr-1"></i> Review</button>
                     <button class="btn-approve" onclick="openFinalizeModal('${a.id}')"><i class="fas fa-check-double mr-1"></i> Sign & Complete</button>
                 </td>
             </tr>`;
@@ -545,40 +556,7 @@
         return html;
     }
 
-    function openReviewEvalModal(appId) {
-        currentFinalizeAppId = appId;
-        const apps = loadApplications();
-        const app = apps.find(a => a.id == appId);
-        if (!app) return;
-
-        const e = app.evaluation || {};
-        const total = (e.punctuality || 0) + (e.quality || 0) + (e.teamwork || 0) + (e.initiative || 0);
-        const companySignatureStatus = app.diplomaSignedByCompany
-            ? `✓ Signed on ${app.diplomaSignedDate || 'N/A'}`
-            : '✗ Not yet signed';
-
-        document.getElementById('reviewEvalDetails').innerHTML = `
-            <p><strong>Student:</strong> ${app.studentName}</p>
-            <p><strong>Company:</strong> ${app.company}</p>
-            <p><strong>Internship:</strong> ${app.internshipTitle}</p>
-            <hr style="margin:12px 0;">
-            <p><strong>Punctuality:</strong> ${e.punctuality || 'N/A'}/5</p>
-            <p><strong>Quality of Work:</strong> ${e.quality || 'N/A'}/5</p>
-            <p><strong>Teamwork:</strong> ${e.teamwork || 'N/A'}/5</p>
-            <p><strong>Initiative & Problem‑Solving:</strong> ${e.initiative || 'N/A'}/5</p>
-            <p><strong>Total Score:</strong> ${total}/20</p>
-            <hr style="margin:12px 0;">
-            <p><strong>Company Comments:</strong> ${e.comments || 'None'}</p>
-            <p><strong>Company Signature:</strong> ${companySignatureStatus}</p>
-        `;
-        document.getElementById('reviewEvalModal').style.display = 'flex';
-    }
-
-    function signFromReview() {
-        closeModal('reviewEvalModal');
-        openFinalizeModal(currentFinalizeAppId);
-    }
-
+    // ==================== MODALS & ACTIONS ====================
     function openFinalizeModal(appId) {
         currentFinalizeAppId = appId;
         const apps = loadApplications();
@@ -593,7 +571,11 @@
             <p><strong>Student:</strong> ${app.studentName}</p>
             <p><strong>Company:</strong> ${app.company}</p>
             <p><strong>Internship:</strong> ${app.internshipTitle}</p>
-            <p><strong>Evaluation:</strong> P:${e.punctuality || 'N/A'} Q:${e.quality || 'N/A'} T:${e.teamwork || 'N/A'} I:${e.initiative || 'N/A'} <strong>Total: ${total}/20</strong></p>
+            <p><strong>Punctuality:</strong> ${e.punctuality || 'N/A'}/5</p>
+            <p><strong>Quality of Work:</strong> ${e.quality || 'N/A'}/5</p>
+            <p><strong>Teamwork:</strong> ${e.teamwork || 'N/A'}/5</p>
+            <p><strong>Initiative:</strong> ${e.initiative || 'N/A'}/5</p>
+            <p><strong>Total Score:</strong> ${total}/20</p>
             <p><strong>Comments:</strong> ${e.comments || 'None'}</p>
             <p><strong>Company Signature:</strong> ${cs}</p>
             <p style="margin-top:12px;color:#4B5563;">Your signature will complete this internship and generate the final certificate.</p>
@@ -671,11 +653,12 @@
             <p>Company: ${company}</p>
             <p>Internship: ${internship}</p>
             <p style="margin-top:12px;color:#4B5563;">Both signatures are present on this certificate.</p>
-            <iframe src="${url}" width="100%" height="400px" style="border:none; margin-top:16px; border-radius:12px;"></iframe>
+            <iframe src="${url}" width="100%" height="400px" style="border:none;margin-top:16px;border-radius:12px;"></iframe>
         `;
         document.getElementById('contractModal').style.display = 'flex';
     }
 
+    // ==================== STUDENTS ====================
     function renderStudentsView(container) {
         const students = loadStudents();
         container.innerHTML = `
@@ -719,11 +702,9 @@
         const { student, company, internship } = currentContract;
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
         doc.text('INTERNSHIP AGREEMENT', 105, 20, { align: 'center' });
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11); doc.setFont('helvetica', 'normal');
         doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 35);
         doc.text('Between: University Echahid Cheikh Larbi Tebessi - Tebessa', 20, 45);
         doc.text(`Student: ${student}`, 20, 55);
@@ -738,11 +719,9 @@
     window.downloadCompletionPdf = function(student, company, internship) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
         doc.text('CERTIFICATE OF INTERNSHIP COMPLETION', 105, 20, { align: 'center' });
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(12); doc.setFont('helvetica', 'normal');
         doc.text(`This is to certify that ${student}`, 105, 50, { align: 'center' });
         doc.text(`has successfully completed: ${internship} at ${company}`, 105, 60, { align: 'center' });
         doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 80, { align: 'center' });
@@ -751,6 +730,7 @@
         doc.save(`Certificate_${student.replace(/\s/g, '_')}.pdf`);
     };
 
+    // ==================== SHARED FUNCTIONS ====================
     window.viewCompanyDetails = function(companyId) {
         currentCompanyId = companyId;
         const company = loadCompanies().find(c => c.id === companyId);
@@ -816,6 +796,7 @@
         }
     };
 
+    // ==================== TAB SWITCHING ====================
     window.switchTab = function(tabName, btn) {
         document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
         if (btn) btn.classList.add('active');
@@ -832,6 +813,7 @@
         if (target) target.classList.add('active');
     };
 
+    // ==================== INITIALIZATION ====================
     document.querySelectorAll('.menu-item').forEach(item => {
         item.addEventListener('click', () => {
             const view = item.dataset.view;
@@ -842,8 +824,6 @@
     document.getElementById('verifyCompanyBtn').onclick = verifyCompany;
     document.getElementById('rejectCompanyBtn').onclick = rejectCompany;
 
-    window.openReviewEvalModal = openReviewEvalModal;
-    window.signFromReview = signFromReview;
     window.openFinalizeModal = openFinalizeModal;
     window.finalizeInternship = finalizeInternship;
     window.validateAgreement = validateAgreement;
